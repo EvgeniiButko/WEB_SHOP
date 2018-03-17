@@ -12,7 +12,7 @@ import java.util.List;
 public class ConnectionGetter {
 
     private static DataSource dataSource;
-    private static List<Connection> connection = new ArrayList<>();
+    private static Connection connection = null;
 
     static {
         try {
@@ -31,10 +31,7 @@ public class ConnectionGetter {
     }
 
     public static Connection getConnection() throws SQLException {
-        for (int i = 0; i < connection.size(); i++) {
-            if(connection.get(i).isClosed())return connection.get(i);
-        }
-        connection.add(dataSource.getConnection());
-        return connection.get(connection.size()-1);
+        connection = dataSource.getConnection();
+        return connection;
     }
 }

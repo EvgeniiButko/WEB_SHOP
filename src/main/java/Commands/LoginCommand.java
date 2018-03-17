@@ -30,7 +30,8 @@ public class LoginCommand implements ActionCommand {
             session.setAttribute("user",login);
 
             //определение пути к main.jsp
-            if(session.getAttribute("userType") == AccessEnum.ADMIN) {
+            if(session.getAttribute("userType") == AccessEnum.ADMIN ||
+                    session.getAttribute("userType") == AccessEnum.USER) {
                 try {
                     request.setAttribute("products", new ProductDAO(ConnectionGetter.getConnection()).getAll());
                 } catch (SQLException e) {

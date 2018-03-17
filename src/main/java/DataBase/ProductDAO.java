@@ -14,6 +14,7 @@ public class ProductDAO extends AbstractDAO{
     private String ADD_PRODUCT = "INSERT INTO myschema.products(name,information,url,prize) " +
             "VALUES (?,?,?,?)";
     private String DELETE_PRODUCT_BYID = "DELETE * FROM myschema.products WHERE id = ?";
+    private String GET_PRODUCT_BYID = "SELECT * FROM myschema.products WHERE id = ?";
 
     public ProductDAO(Connection connectionA) {
         super(connectionA);
@@ -55,5 +56,29 @@ public class ProductDAO extends AbstractDAO{
         resultSet.close();
 
         return list;
+    }
+
+    public Product getProductById(String id) throws SQLException {
+        Product product = null;
+        int ID = Integer.parseInt(id);
+
+        PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_BYID);
+        preparedStatement.setInt(1,ID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()){
+            product = new Product(
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("information"),
+                    resultSet.getString("url"),
+                    resultSet.getInt("prize")
+            );
+        }
+
+        preparedStatement.close();
+        resultSet.close();
+
+        return product;
     }
 }

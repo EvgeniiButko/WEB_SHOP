@@ -45,6 +45,21 @@ public enum CommandEnum {
         {
             this.command = new ProductRedirecting();
         }
+    },
+    USERBUYING{
+        {
+            this.command = new UserBuyProduct();
+        }
+    },
+    CHOOSECARD{
+        {
+            this.command = new ChoosingCardCommand();
+        }
+    },
+    REDIRECTINGCARDNUMB{
+        {
+            this.command = new RedirectingCardNumbCommand();
+        }
     };
 
     ActionCommand command;

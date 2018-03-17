@@ -17,9 +17,21 @@ public class CardDAO extends AbstractDAO{
             "WHERE cardNumb = ?";
     private String ADD_NEW_CARD = "INSERT INTO myschema.usercard(cardNumb,money) " +
             "VALUES (?,?)";
+    private static String UPDATE_VALUE_BY_CARDNUMB = "UPDATE myschema.usercard SET money = (?) " +
+            "WHERE cardNumb = ?";
 
     public CardDAO(Connection connectionA) {
         super(connectionA);
+    }
+
+    public void updateMoneyValue(int cardNumb, double newMoney) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                UPDATE_VALUE_BY_CARDNUMB);
+        preparedStatement.setDouble(1,newMoney);
+        preparedStatement.setInt(2,cardNumb);
+        preparedStatement.execute();
+
+        preparedStatement.close();
     }
 
     public double getUserMoneyByCardNumb(int cardnumb) throws SQLException {

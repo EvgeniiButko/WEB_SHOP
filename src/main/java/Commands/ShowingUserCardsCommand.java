@@ -8,6 +8,7 @@ import DataBase.PropertiesDAO;
 import Resourses.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,15 @@ public class ShowingUserCardsCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest request) {
         String page = "";
+        List<Card> cardList = getCardList(request);
+
+        request.setAttribute("cards",cardList);
+        page = ConfigurationManager.getProperty("path.page.cards");
+
+        return page;
+    }
+
+    public static List<Card> getCardList(HttpServletRequest request){
         List<Integer> list = null;
         CardDAO cardDAO = null;
         try {
@@ -36,9 +46,6 @@ public class ShowingUserCardsCommand implements ActionCommand {
             }
         }
 
-        request.setAttribute("cards",cardList);
-        page = ConfigurationManager.getProperty("path.page.cards");
-
-        return page;
+        return cardList;
     }
 }

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Evgen
@@ -22,5 +23,30 @@
         <input type="hidden" name="command" value="MyCard">
         <input type="submit" value="My Cards">
     </form>
+    <form method="post" action="controller">
+        <input type="hidden" name="command" value="ChooseCard">
+        <input type="submit" value="Choose Card">
+    </form>
+
+    <c:forEach items="${requestScope.products}" var="prod">
+        <div>
+            <hr/>
+            <div>${prod.name}</div>
+            <div>${prod.information}</div>
+            <div>${prod.url}</div>
+            <div>${prod.prize}$</div>
+            <div>
+                <form method="post" action="controller">
+                   <input type="hidden" name="command" value="UserBuying">
+                   <input type="hidden" name="id" value=${prod.id}>
+                    <input type="hidden" name = "cardNumb" value=${requestScope.cardNumb}>
+                   <input type="submit" value="Buy">
+                </form>
+            </div>
+            <hr/>
+        </div>
+    </c:forEach>
+
+    <a href="controller?command=Logout">Logout</a>
 </body>
 </html>
