@@ -11,11 +11,14 @@
 <head>
     <title>Welcome</title>
 </head>
-<a>
       <h3>Welcome</h3>
       <hr/>
                ${user}, hello!
       <hr/>
+<form method="post" action="controller">
+    <input type="hidden" name="command" value="orders">
+    <input type="submit" value="Orders">
+</form>
 
       <c:forEach items="${requestScope.products}" var="prod">
       <div>

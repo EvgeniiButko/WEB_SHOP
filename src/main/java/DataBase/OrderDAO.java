@@ -10,25 +10,43 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class OrderDAO extends AbstractDAO{
+public class OrderDAO extends AbstractDAO {
     private static String GET_ALL = "SELECT * FROM myschema.order";
     private static String GET_ORDERS_BY_USER = "SELECT * FROM myschema.order WHERE login = ?";
     private static String ADD_ORDER = "INSERT INTO myschema.order(login,productid,phonenumb) " +
             "VALUES (?,?,?)";
     private static String GET_ALL_NUMBERS_BY_PRODUCTID = "SELECT phonenumber FROM myschema.order " +
             "WHERE productid = ?";
+    private static String DELETE_ORDER_BY_PRODUCTID = "DELETE FROM myschema.order " +
+            "WHERE productid = ?";
+    private static String DELETE_ORDER_BY_ID = "DELETE FROM myschema.order " +
+            "WHERE id = ?";
 
     public OrderDAO(Connection connectionA) {
         super(connectionA);
     }
 
+    public void deleteOrderById(int id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ORDER_BY_ID);
+        preparedStatement.setInt(1,id);
+        preparedStatement.execute();
+        preparedStatement.close();
+    }
+
+    public void deleteOrderByProductId(int id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ORDER_BY_PRODUCTID);
+        preparedStatement.setInt(1, id);
+        preparedStatement.execute();
+        preparedStatement.close();
+    }
+
     public List<String> getAllNumbersByProduct(int prodID) throws SQLException {
         List<String> list = new LinkedList<>();
         PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_NUMBERS_BY_PRODUCTID);
-        preparedStatement.setInt(1,prodID);
+        preparedStatement.setInt(1, prodID);
 
         ResultSet resultSet = preparedStatement.executeQuery();
-        while(resultSet.next()){
+        while (resultSet.next()) {
             list.add(resultSet.getString("productid"));
         }
         resultSet.close();
@@ -39,9 +57,9 @@ public class OrderDAO extends AbstractDAO{
 
     public void addOrder(String login, int productid, String phonenumb) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(ADD_ORDER);
-        preparedStatement.setInt(2,productid);
-        preparedStatement.setString(1,login);
-        preparedStatement.setString(3,phonenumb);
+        preparedStatement.setInt(2, productid);
+        preparedStatement.setString(1, login);
+        preparedStatement.setString(3, phonenumb);
 
         preparedStatement.execute();
         preparedStatement.close();
@@ -50,10 +68,10 @@ public class OrderDAO extends AbstractDAO{
     public List<Order> getOrderByLogin(String login) throws SQLException {
         List<Order> list = new ArrayList<>();
         PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDERS_BY_USER);
-        preparedStatement.setString(1,login);
+        preparedStatement.setString(1, login);
 
         ResultSet resultSet = preparedStatement.executeQuery();
-        while(resultSet.next()){
+        while (resultSet.next()) {
             list.add(new Order(
                     resultSet.getInt("id"),
                     resultSet.getString("phonenumb"),
@@ -72,7 +90,7 @@ public class OrderDAO extends AbstractDAO{
         List<Order> list = new ArrayList<>();
         PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL);
         ResultSet resultSet = preparedStatement.executeQuery();
-        while(resultSet.next()){
+        while (resultSet.next()) {
             list.add(new Order(
                     resultSet.getInt("id"),
                     resultSet.getString("phonenumb"),

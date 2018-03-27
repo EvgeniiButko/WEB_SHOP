@@ -3,6 +3,7 @@ package Commands;
 import DataBase.CardDAO;
 import DataBase.Connection.ConnectionGetter;
 import DataBase.DataBaseComponents.Product;
+import DataBase.OrderDAO;
 import DataBase.ProductDAO;
 import DataBase.PropertiesDAO;
 import Resourses.ConfigurationManager;
@@ -19,11 +20,12 @@ public class UserBuyProduct implements ActionCommand {
         String page = null;
         String id = request.getParameter("id");
         String user = (String) request.getSession().getAttribute("user");
-        String cardNumber = (String) request.getParameter("cardNumb");
+        String cardNumber = (String) request.getSession().getAttribute("cardNumb");
 
         Product product = null;
         List<Integer> cardNumb = null;
         CardDAO cardDAO  = null;
+
         try {
             request.setAttribute("products", new ProductDAO(ConnectionGetter.getConnection()).getAll());
 
@@ -42,6 +44,13 @@ public class UserBuyProduct implements ActionCommand {
                 request.setAttribute("succesfuly", MessageManager.getProperty("message.cardError"));
                 page = ConfigurationManager.getProperty("path.page.user");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            OrderDAO orderDAO = new OrderDAO(ConnectionGetter.getConnection());
+            orderDAO.addOrder(user,product.getId(),"0505590720");
         } catch (SQLException e) {
             e.printStackTrace();
         }

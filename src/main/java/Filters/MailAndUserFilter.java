@@ -1,5 +1,6 @@
 package Filters;
 
+import Controllers.RequestContext;
 import DataBase.Connection.ConnectionGetter;
 import DataBase.PropertiesDAO;
 import Logic.AccessEnum;
@@ -27,6 +28,27 @@ public class MailAndUserFilter implements Filter {
 
         String command = request.getParameter("command").toUpperCase();
         switch(command){
+            case "DELETE": {
+                String login = (String) request.getSession().getAttribute("user");
+                if(login.equals("admin")){
+                    filterChain.doFilter(request,response);
+                }
+                break;
+            }
+            case "ORDERS": {
+                String login = (String) request.getSession().getAttribute("user");
+                if(login.equals("admin")){
+                    filterChain.doFilter(request,response);
+                }
+                break;
+            }
+            case "PRODUCTREDIRECT":{
+                String login = (String) request.getSession().getAttribute("user");
+                if(login.equals("admin")){
+                   filterChain.doFilter(request,response);
+                }
+                break;
+            }
             case "REGISTER":{
                 String mail = request.getParameter("mail");
                 String login = request.getParameter("login");

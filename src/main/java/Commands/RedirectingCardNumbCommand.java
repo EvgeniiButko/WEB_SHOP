@@ -11,7 +11,7 @@ public class RedirectingCardNumbCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest request) {
         String cardNumb = request.getParameter("cardNumb");
-        request.setAttribute("cardNumb", cardNumb);
+        request.getSession().setAttribute("cardNumb", cardNumb);
         try {
             request.setAttribute("products", new ProductDAO(ConnectionGetter.getConnection()).getAll());
         } catch (SQLException e) {

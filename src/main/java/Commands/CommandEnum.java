@@ -60,6 +60,16 @@ public enum CommandEnum {
         {
             this.command = new RedirectingCardNumbCommand();
         }
+    },
+    ORDERS{
+        {
+            this.command = new OrderCommand();
+        }
+    },
+    DELETEORDER {
+        {
+            this.command = new DeleteOrderCommand();
+        }
     };
 
     ActionCommand command;
