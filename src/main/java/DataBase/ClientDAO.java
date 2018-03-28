@@ -16,6 +16,8 @@ public class ClientDAO extends AbstractDAO{
             " WHERE login = ?";
     private static String GET_CLIENT_BY_ID = "SELECT * FROM myschema.client" +
             " WHERE id = ?";
+    private static String GET_CLIENTMAIL_BY_LOGIN = "SELECT mail FROM myschema.client" +
+            " WHERE login = ?";
 
     public ClientDAO(Connection connectionA) {
         super(connectionA);
@@ -77,4 +79,24 @@ public class ClientDAO extends AbstractDAO{
         preparedStatement.close();
     }
 
+    /**
+     * Returns client`s mail via setting the login
+     * @param login
+     * @return
+     * @throws SQLException
+     */
+    public String getClientMailByLogin(String login) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(GET_CLIENTMAIL_BY_LOGIN);
+        preparedStatement.setString(1,login);
+        String result = null;
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            result = resultSet.getString("mail");
+        }
+        resultSet.close();
+        preparedStatement.close();
+
+        return result;
+    }
 }

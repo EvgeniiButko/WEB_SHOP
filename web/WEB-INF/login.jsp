@@ -30,5 +30,6 @@
           <input type="hidden" name="command" value="REGISTERREDIRECT"/>
           <input type = "submit" value="Register"/>
       </form>
+      <a href="controller?command=forgotredirect">Forgot Password</a>
 </body>
 </html>

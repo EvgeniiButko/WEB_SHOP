@@ -70,6 +70,21 @@ public enum CommandEnum {
         {
             this.command = new DeleteOrderCommand();
         }
+    },
+    FORGOTPASS {
+        {
+            this.command = new ForgotPasswordCommand();
+        }
+    },
+    FORGOTREDIRECT {
+        {
+            this.command = new ForgotRedirectingCommand();
+        }
+    },
+    CONFIRMATIONPASSWORD {
+        {
+            this.command = new ConfirmationPasswordCommand();
+        }
     };
 
     ActionCommand command;

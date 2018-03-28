@@ -1,18 +1,13 @@
 package Logic;
 
-import Resourses.ConfigurationManager;
 import Resourses.MessageManager;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Formatter;
 import java.util.Properties;
-import java.util.Scanner;
 
 /**
  * A logic for the Email.
@@ -38,22 +33,25 @@ public final class MailLogic {
 
     /**
      * Sends the message.
+     *
      * @param email email.
-     * @param id id.
+     * @param id    id.
      * @param login login.
-     * @throws MessagingException occurs when the message wasn't sent.
+     * @throws MessagingException    occurs when the message wasn't sent.
      * @throws FileNotFoundException occurs when a file with
-     * the message is lost.
+     *                               the message is lost.
      */
     public static void sendConfirmationMessage(final String email,
                                                final int id,
-                                               final String login)
+                                               final String login,
+                                               final String mess)
             throws MessagingException, FileNotFoundException {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication
@@ -65,7 +63,7 @@ public final class MailLogic {
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(email));
         message.setSubject("Confirmation");
-        message.setContent(createConfirmMessage(id, login),
+        message.setContent(createConfirmMessage(id, login, mess),
                 "text/html");
         Transport.send(message);
 
@@ -73,31 +71,25 @@ public final class MailLogic {
 
     /**
      * Creates message for confirmation.
-     * @param id id.
+     *
+     * @param id    id.
      * @param login login.
      * @return Message.
      * @throws FileNotFoundException occurs when a file with
-     * the message is lost.
+     *                               the message is lost.
      */
     private static String createConfirmMessage(final int id,
-                                               final String login)
+                                               final String login,
+                                               final String mess)
             throws FileNotFoundException {
-        String message = "";
-//        Scanner scanner = new Scanner(new File("web/text.txt"));
-//        while (scanner.hasNextLine()) {
-//            message = message.concat(scanner.nextLine()
-//                    .concat(System.lineSeparator()));
-//        }
-//        scanner.close();
-        message = MessageManager.getProperty("message.confirm");
         Formatter formatter = new Formatter();
-        formatter.format(message, login, id);
+        formatter.format(mess, login, id);
         return formatter.toString();
     }
 
     public static void main(String[] args) {
         try {
-            new MailLogic().sendConfirmationMessage("butkoevgenii@gmail.com",1,"butkoevgenii@gmail.com");
+            sendConfirmationMessage("butkoevgenii@gmail.com",1,"butkoevgenii@gmail.com","hello");
         } catch (MessagingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
